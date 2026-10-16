@@ -1,0 +1,41 @@
+const SAMPLE_AUTH = [
+  "Oct 14 08:01:12 srv01 sshd[2211]: Accepted password for feven from 192.0.2.10 port 51122 ssh2",
+  "Oct 14 08:15:40 srv01 sshd[2230]: Accepted password for admin from 192.0.2.11 port 40211 ssh2",
+  "Oct 14 09:02:03 srv01 sshd[2301]: Failed password for root from 198.51.100.23 port 33001 ssh2",
+  "Oct 14 09:02:05 srv01 sshd[2302]: Failed password for root from 198.51.100.23 port 33002 ssh2",
+  "Oct 14 09:02:07 srv01 sshd[2303]: Failed password for root from 198.51.100.23 port 33003 ssh2",
+  "Oct 14 09:02:09 srv01 sshd[2304]: Failed password for root from 198.51.100.23 port 33004 ssh2",
+  "Oct 14 09:02:11 srv01 sshd[2305]: Failed password for root from 198.51.100.23 port 33005 ssh2",
+  "Oct 14 09:02:13 srv01 sshd[2306]: Failed password for root from 198.51.100.23 port 33006 ssh2",
+  "Oct 14 09:02:15 srv01 sshd[2307]: Failed password for admin from 198.51.100.23 port 33007 ssh2",
+  "Oct 14 09:02:18 srv01 sshd[2308]: Accepted password for admin from 198.51.100.23 port 33008 ssh2",
+  "Oct 14 10:30:01 srv01 sshd[2400]: Failed password for invalid user test from 203.0.113.77 port 40001 ssh2",
+  "Oct 14 10:31:15 srv01 sshd[2401]: Failed password for invalid user guest from 203.0.113.77 port 40002 ssh2",
+  "Oct 14 10:32:30 srv01 sshd[2402]: Failed password for invalid user oracle from 203.0.113.77 port 40003 ssh2",
+  "Oct 14 10:33:45 srv01 sshd[2403]: Failed password for invalid user ubuntu from 203.0.113.77 port 40004 ssh2",
+  "Oct 14 10:34:50 srv01 sshd[2404]: Failed password for invalid user postgres from 203.0.113.77 port 40005 ssh2",
+  "Oct 14 11:45:22 srv01 sshd[2500]: Failed password for feven from 192.0.2.10 port 51300 ssh2",
+  "Oct 14 11:45:30 srv01 sshd[2501]: Accepted password for feven from 192.0.2.10 port 51301 ssh2",
+  "Oct 14 13:10:05 srv01 sshd[2600]: Accepted publickey for admin from 192.0.2.11 port 40500 ssh2",
+  "Oct 14 14:20:44 srv01 sshd[2700]: Failed password for root from 198.51.100.99 port 50001 ssh2",
+  "Oct 14 14:20:46 srv01 sshd[2701]: Failed password for root from 198.51.100.99 port 50002 ssh2"
+].join("\n");
+
+const SAMPLE_WEB = [
+  '192.0.2.10 - - [14/Oct/2026:08:05:11 +0000] "GET /index.html HTTP/1.1" 200 1534 "-" "Mozilla/5.0"',
+  '192.0.2.10 - - [14/Oct/2026:08:05:14 +0000] "GET /about.html HTTP/1.1" 200 980 "-" "Mozilla/5.0"',
+  '192.0.2.11 - - [14/Oct/2026:08:20:30 +0000] "GET /products?id=12 HTTP/1.1" 200 2210 "-" "Mozilla/5.0"',
+  '198.51.100.23 - - [14/Oct/2026:09:10:01 +0000] "GET /products?id=1\' OR \'1\'=\'1 HTTP/1.1" 200 5120 "-" "Mozilla/5.0"',
+  '198.51.100.23 - - [14/Oct/2026:09:10:05 +0000] "GET /products?id=1 UNION SELECT username,password FROM users-- HTTP/1.1" 500 310 "-" "Mozilla/5.0"',
+  '203.0.113.77 - - [14/Oct/2026:10:00:01 +0000] "GET /search?q=<script>alert(1)</script> HTTP/1.1" 200 800 "-" "Mozilla/5.0"',
+  '203.0.113.77 - - [14/Oct/2026:10:00:09 +0000] "GET /search?q=<img src=x onerror=alert(1)> HTTP/1.1" 200 800 "-" "Mozilla/5.0"',
+  '198.51.100.99 - - [14/Oct/2026:11:30:12 +0000] "GET /../../etc/passwd HTTP/1.1" 400 220 "-" "curl/7.88"',
+  '198.51.100.99 - - [14/Oct/2026:11:30:15 +0000] "GET /download?file=../../../windows/win.ini HTTP/1.1" 403 220 "-" "curl/7.88"',
+  '192.0.2.50 - - [14/Oct/2026:12:00:01 +0000] "GET /admin HTTP/1.1" 404 210 "-" "Nikto/2.1.6"',
+  '192.0.2.50 - - [14/Oct/2026:12:00:02 +0000] "GET /backup.zip HTTP/1.1" 404 210 "-" "Nikto/2.1.6"',
+  '192.0.2.50 - - [14/Oct/2026:12:00:03 +0000] "GET /.git/config HTTP/1.1" 404 210 "-" "Nikto/2.1.6"',
+  '192.0.2.50 - - [14/Oct/2026:12:00:04 +0000] "GET /phpmyadmin HTTP/1.1" 404 210 "-" "Nikto/2.1.6"',
+  '192.0.2.50 - - [14/Oct/2026:12:00:05 +0000] "GET /wp-login.php HTTP/1.1" 404 210 "-" "Nikto/2.1.6"',
+  '192.0.2.12 - - [14/Oct/2026:13:15:20 +0000] "POST /login HTTP/1.1" 200 640 "-" "Mozilla/5.0"',
+  '192.0.2.12 - - [14/Oct/2026:13:16:02 +0000] "GET /account HTTP/1.1" 200 1800 "-" "Mozilla/5.0"'
+].join("\n");
