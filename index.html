@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Log Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Security Log Dashboard</h1>
+    <p class="subtitle">A mini SIEM that runs in your browser. Load a log file, find the attacks.</p>
+  </header>
+
+  <section class="controls">
+    <div class="control">
+      <label for="log-type">Log type</label>
+      <select id="log-type">
+        <option value="auth">SSH / authentication log</option>
+        <option value="web">Web server access log</option>
+      </select>
+    </div>
+    <div class="control">
+      <label for="log-file">Upload a log file</label>
+      <input type="file" id="log-file" accept=".log,.txt">
+    </div>
+    <div class="control buttons">
+      <button id="btn-sample">Load sample data</button>
+      <button id="btn-analyze">Analyze</button>
+      <button id="btn-csv" class="secondary" disabled>Export alerts (CSV)</button>
+    </div>
+  </section>
+
+  <textarea id="log-input" placeholder="Or paste log lines here..."></textarea>
+  <p class="hint" id="format-hint"></p>
+
+  <section id="dashboard" class="hidden">
+    <div class="stats">
+      <div class="stat"><span id="s-lines">0</span><small>Log lines</small></div>
+      <div class="stat"><span id="s-parsed">0</span><small>Parsed events</small></div>
+      <div class="stat"><span id="s-ips">0</span><small>Unique IPs</small></div>
+      <div class="stat alert-stat"><span id="s-alerts">0</span><small>Alerts</small></div>
+    </div>
+
+    <div class="charts">
+      <div class="chart-box">
+        <h3 id="chart1-title">Events per hour</h3>
+        <div id="chart-hours"></div>
+      </div>
+      <div class="chart-box">
+        <h3 id="chart2-title">Top source IPs</h3>
+        <div id="chart-ips"></div>
+      </div>
+    </div>
+
+    <h2>Alerts</h2>
+    <div class="table-wrap">
+      <table id="alert-table">
+        <thead>
+          <tr><th>Severity</th><th>Rule</th><th>MITRE ATT&amp;CK</th><th>Source IP</th><th>Evidence</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="no-alerts" class="hidden ok-msg">No alerts triggered by the current rules.</p>
+  </section>
+
+  <section class="rules">
+    <h2>Detection rules</h2>
+    <ul>
+      <li><strong>Brute force:</strong> 5 or more failed logins from one IP within 5 minutes (T1110.001)</li>
+      <li><strong>Password spraying:</strong> one IP failing against 4 or more different usernames (T1110.003)</li>
+      <li><strong>Suspicious success:</strong> a successful login right after 3 or more failures from the same IP (T1078)</li>
+      <li><strong>SQL injection:</strong> SQL keywords or tautologies in web requests (T1190)</li>
+      <li><strong>Cross-site scripting:</strong> script tags or event handlers in requests (T1190)</li>
+      <li><strong>Path traversal:</strong> <code>../</code> sequences or access to system files (T1083)</li>
+      <li><strong>Scanner activity:</strong> known scanner user agents or many 404 errors from one IP (T1595)</li>
+    </ul>
+  </section>
+
+  <p class="note">
+    Educational project with fictional sample data. Everything is processed locally in your browser.
+    Detection rules are simple examples and are not a replacement for a production SIEM.
+  </p>
+
+  <script src="sample-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
