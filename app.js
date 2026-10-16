@@ -28,8 +28,7 @@ function parseAuth(text) {
 function parseWeb(text) {
   const events = [];
   const lines = text.split("\n").filter(function (l) { return l.trim(); });
-  const re = /^([\d.]+)\s+\S+\s+\S+\s+\[(\d+)\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})[^\]]*\]\s+"(\S+)\s+(\S+)[^"]*"\s+(\d{3})\s+\S+\s+"[^"]*"\s+"([^"]*)"/;
-  lines.forEach(function (line) {
+    const re = /^([\d.]+)\s+\S+\s+\S+\s+\[(\d+)\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})[^\]]*\]\s+"(\S+)\s+(.*?)\s+HTTP\/[\d.]+"\s+(\d{3})\s+\S+\s+"[^"]*"\s+"([^"]*)"/;
     const m = line.match(re);
     if (!m) return;
     const time = new Date(+m[4], MONTHS[m[3]], +m[2], +m[5], +m[6], +m[7]);
