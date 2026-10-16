@@ -4,6 +4,17 @@ A browser-based mini SIEM. It parses SSH authentication logs and web server acce
 
 **Live demo:** https://fevenadane586-design.github.io/security-log-dashboard/
 
+## Screenshots
+
+### SSH authentication log analysis
+![Auth log analysis](screenshot-auth.png)
+
+### Web server log analysis
+![Web log analysis](screenshot-web.png)
+
+### CSV export
+![CSV report](screenshot-csv.png)
+
 ## Features
 
 - Parses SSH auth logs and Apache/Nginx-style access logs
