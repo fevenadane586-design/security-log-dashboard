@@ -28,7 +28,6 @@ function parseAuth(text) {
 function parseWeb(text) {
   const events = [];
   const lines = text.split("\n").filter(function (l) { return l.trim(); });
-  // The path is everything between the method and "HTTP/x.x", so spaces in the path are kept
   const re = /^([\d.]+)\s+\S+\s+\S+\s+\[(\d+)\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})[^\]]*\]\s+"(\S+)\s+(.*?)\s+HTTP\/[\d.]+"\s+(\d{3})\s+\S+\s+"[^"]*"\s+"([^"]*)"/;
   lines.forEach(function (line) {
     const m = line.match(re);
@@ -51,6 +50,52 @@ function detectAuth(events) {
     const list = byIp[ip].slice().sort(function (a, b) { return a.time - b.time; });
     const fails = list.filter(function (e) { return e.status === "Failed"; });
 
-    // Brute force: 5+ failures inside any 5-minute window
     let bruteFound = false;
-    for (let i = 0; i + 4 <
+    for (let i = 0; i + 4 < fails.length && !bruteFound; i++) {
+      if (fails[i + 4].time - fails[i].time <= 5 * 60 * 1000) {
+        alerts.push({
+          severity: "High", rule: "Brute force login", mitre: "T1110.001", ip: ip,
+          evidence: "5+ failed logins within 5 minutes (" + fails.length + " failures total)"
+        });
+        bruteFound = true;
+      }
+    }
+
+    const users = {};
+    fails.forEach(function (e) { users[e.user] = true; });
+    const userCount = Object.keys(users).length;
+    if (userCount >= 4) {
+      alerts.push({
+        severity: "High", rule: "Password spraying", mitre: "T1110.003", ip: ip,
+        evidence: "Failed against " + userCount + " different usernames: " + Object.keys(users).join(", ")
+      });
+    }
+
+    let streak = 0;
+    let flagged = false;
+    list.forEach(function (e) {
+      if (e.status === "Failed") {
+        streak++;
+      } else {
+        if (streak >= 3 && !flagged) {
+          alerts.push({
+            severity: "High", rule: "Suspicious successful login", mitre: "T1078", ip: ip,
+            evidence: "Login as '" + e.user + "' succeeded after " + streak + " consecutive failures"
+          });
+          flagged = true;
+        }
+        streak = 0;
+      }
+    });
+
+    if (fails.length >= 2 && !alerts.some(function (a) { return a.ip === ip; })) {
+      alerts.push({
+        severity: "Low", rule: "Repeated failed logins", mitre: "T1110", ip: ip,
+        evidence: fails.length + " failed logins, below the brute force threshold"
+      });
+    }
+  });
+  return alerts;
+}
+
+// ---------- PART 2 STARTS BELOW THIS LINE ----------
